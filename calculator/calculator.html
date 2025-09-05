@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popup Calculator</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+    }
+
+    .calculator {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      width: 300px;
+    }
+
+    .display {
+      width: 100%;
+      height: 60px;
+      margin-bottom: 20px;
+      text-align: right;
+      font-size: 24px;
+      border: none;
+      border-radius: 10px;
+      background: #f3f3f3;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    button {
+      height: 60px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: #2575fc;
+      color: white;
+      transition: transform 0.1s, background 0.2s;
+    }
+
+    button:hover {
+      background: #1b5ed8;
+    }
+
+    button:active {
+      transform: scale(0.9);
+    }
+
+    .operator {
+      background: #6a11cb;
+    }
+
+    .operator:hover {
+      background: #520f9a;
+    }
+
+    .equal {
+      grid-column: span 2;
+      background: #00c853;
+    }
+
+    .equal:hover {
+      background: #009624;
+    }
+
+    .clear {
+      background: #ff3d00;
+    }
+
+    .clear:hover {
+      background: #b71c1c;
+    }
+
+    /* Popup Styling */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 15px 30px;
+      border-radius: 12px;
+      font-size: 22px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .popup.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" class="display" id="display" disabled>
+
+    <div class="buttons">
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button onclick="append('%')">%</button>
+      <button onclick="append('/')">÷</button>
+      <button class="operator" onclick="append('*')">×</button>
+
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button class="operator" onclick="append('-')">−</button>
+
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button class="operator" onclick="append('+')">+</button>
+
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append('.')">.</button>
+
+      <button onclick="append('0')">0</button>
+      <button class="equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <!-- Popup box -->
+  <div id="popup" class="popup"></div>
+
+  <script>
+    let display = document.getElementById('display');
+    let popup = document.getElementById('popup');
+
+    function showPopup(message) {
+      popup.textContent = message;
+      popup.classList.add("show");
+      setTimeout(() => {
+        popup.classList.remove("show");
+      }, 2000); // disappears after 2 seconds
+    }
+
+    function append(value) {
+      display.value += value;
+      showPopup(value); // show pressed button in popup
+    }
+
+    function clearDisplay() {
+      display.value = '';
+      showPopup("Cleared");
+    }
+
+    function calculate() {
+      try {
+        let result = eval(display.value);
+        display.value = result;
+        showPopup("= " + result);
+      } catch {
+        display.value = 'Error';
+        showPopup("Error");
+      }
+    }
+  </script>
+</body>
+</html>
